@@ -68,10 +68,10 @@ var channel = new function () {
   };
 
   // clear old callbacks
-  // they can hang around for at most 30 seconds.
+  // they can hang around for at most 20 seconds.
   setInterval(function () {
     var now = new Date();
-    while (callbacks.length > 0 && now - callbacks[0].timestamp > 30*1000) {
+    while (callbacks.length > 0 && now - callbacks[0].timestamp > 20*1000) {
       callbacks.shift().callback([]);
     }
   }, 3000);
