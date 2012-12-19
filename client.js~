@@ -228,7 +228,8 @@ function addMessage (from, text, time, _class) {
   {
     var reg2 =/\[img\]/;
     var reg3 = /\[\/img\]/;
-    text=text.replace(reg2,"</br><img src=\"").replace(reg3,"\"></br>");
+    text=text.replace(reg2,"</br><img  class='img-polaroid' src=\"").replace(reg3,"\"></br>");
+    text=nl2br(text)
     // alert(text);
   }
     //alert(reg.test(text));
@@ -447,11 +448,11 @@ function who () {
 $(document).ready(function() {
 
   //submit new messages when the user hits enter if the message isnt blank
-  $("#entry").keypress(function (e) {
-    if (e.keyCode != 13 /* Return */) return;
+  $("#entry").keyup(function (e) {
+    if (e.keyCode != 13 /* Return */ || (e.shiftKey && e.keyCode == 13 )) return;
     var msg = $("#entry").attr("value").replace("\n", "");
     if (!util.isBlank(msg)) send(msg);
-    $("#entry").attr("value", "[img][/img]"); // clear the entry field.
+    $("#entry").attr("value", ""); // clear the entry field.
   });
 
   $("#usersLink").click(outputUsers);
@@ -460,28 +461,28 @@ $(document).ready(function() {
   $("#connectButton").click(function () {
     //lock the UI while waiting for a response
     showLoad();
-    var nick = $("#nickInput").attr("value");
+    var password = $("#passwordInput").attr("value");
 
     //dont bother the backend if we fail easy validations
-    if (nick.length > 50) {
+   /* if (nick.length > 50) {
       alert("Nick too long. 50 character max.");
       showConnect();
       return false;
-    }
+    }*/
 
     //more validations
-    if (/[^\w_\-^!]/.exec(nick)) {
+   /* if (/[^\w_\-^!]/.exec(nick)) {
       alert("Bad character in nick. Can only have letters, numbers, and '_', '-', '^', '!'");
       showConnect();
       return false;
-    }
+    }*/
 
     //make the actual join request to the server
     $.ajax({ cache: false
            , type: "GET" // XXX should be POST
            , dataType: "json"
            , url: "/join"
-           , data: { nick: nick }
+           , data: { hash: password }
            , error: function () {
                alert("error connecting to server");
                showConnect();
@@ -518,3 +519,66 @@ $(document).ready(function() {
 $(window).unload(function () {
   jQuery.get("/part", {id: CONFIG.id}, function (data) { }, "json");
 });
+
+(function($) {
+    $.fn.getCursorPosition = function() {
+        var input = this.get(0);
+        if (!input) return; // No (input) element found
+        if ('selectionStart' in input) {
+            // Standard-compliant browsers
+            return input.selectionStart;
+        } else if (document.selection) {
+            // IE
+            input.focus();
+            var sel = document.selection.createRange();
+            var selLen = document.selection.createRange().text.length;
+            sel.moveStart('character', -input.value.length);
+            return sel.text.length - selLen;
+        }
+    }
+})(jQuery);
+function addImgTag()
+{
+    var cursorPosition = $("#entry").getCursorPosition()
+    $("#entry").val($("#entry").val()+"[img][/img]")
+    
+}
+
+function doGetCaretPosition (ctrl) {
+	var CaretPos = 0;   // IE Support
+	if (document.selection) {
+		ctrl.focus ();
+		var Sel = document.selection.createRange ();
+		Sel.moveStart ('character', -ctrl.value.length);
+		CaretPos = Sel.text.length;
+	}
+	// Firefox support
+	else if (ctrl.selectionStart || ctrl.selectionStart == '0')
+		CaretPos = ctrl.selectionStart;
+	return (CaretPos);
+}
+function setCaretPosition(ctrl, pos){
+	if(ctrl.setSelectionRange)
+	{
+		ctrl.focus();
+		ctrl.setSelectionRange(pos,pos);
+	}
+	else if (ctrl.createTextRange) {
+		var range = ctrl.createTextRange();
+		range.collapse(true);
+		range.moveEnd('character', pos);
+		range.moveStart('character', pos);
+		range.select();
+	}
+}
+
+
+function nl2br( str ) {	// Inserts HTML line breaks before all newlines in a string
+	// 
+	// +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+
+	return str.replace(/([^>])\n/g, '$1<br/>');
+}
+
+
+
