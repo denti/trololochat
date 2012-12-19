@@ -1,11 +1,12 @@
 HOST = null; // localhost
 PORT = process.env.PORT || 5000;
+var fs = require("fs");
 
 var users={};
-users["asd"]="Денис Вадимович"
-users["qwe"]="Леонид Прудников"
-	//Леонид Прудников:2,
-
+users["84152fe11d7adb51871c4cd734ae35c4f98f0e91da5f3d2507303913a1b5849b"]="Денис Вадимович"
+users["7a66d01b356aeeb077b5f74cc0d9df894e9f50f4bac6c8aa2ea2109e58d1b9ac"]="Леонид Прудников"
+users["9c6d405bba2db24bfbd22fc7ff74b39bd9c5e9c6ce66299c6519be517e6ed7c6"]="Алексей Викторович"
+users["03085dc11c68960927dc342ea47460d4949cb28a2e973a074814e35dfde9e459"]="Deniro"
 // when the daemon started
 var starttime = (new Date()).getTime();
 
@@ -129,13 +130,12 @@ setInterval(function () {
 fu.listen(Number(process.env.PORT || PORT), HOST);
 
 fu.get("/", fu.staticHandler("index.html"));
-fu.get("/style.css", fu.staticHandler("css/style.css"));
-fu.get("/client.js", fu.staticHandler("client.js"));
-fu.get("/jquery.js", fu.staticHandler("js/jquery.js"));
-fu.get("/js/jquery.sha256.js", fu.staticHandler("js/jquery.sha256.js"));
-fu.get("/js/bootstrap.min.js", fu.staticHandler("js/bootstrap.min.js"));
-fu.get("/css/bootstrap.min.css", fu.staticHandler("css/bootstrap.min.css"));
-//fu.get("/bootstrap.js", fu.staticHandler("js/bootstrap.min.js"));
+//fu.get("/style.css", fu.staticHandler("css/style.css"));
+//fu.get("/client.js", fu.staticHandler("client.js"));
+//fu.get("/jquery.js", fu.staticHandler("js/jquery.js"));
+//fu.get("/js/jquery.sha256.js", fu.staticHandler("js/jquery.sha256.js"));
+//fu.get("/js/bootstrap.min.js", fu.staticHandler("js/bootstrap.min.js"));
+//fu.get("/css/bootstrap.min.css", fu.staticHandler("css/bootstrap.min.css"));
 
 
 fu.get("/who", function (req, res) {
@@ -150,17 +150,32 @@ fu.get("/who", function (req, res) {
                       });
 });
 
+fu.get("/getSmiles", function (req, res) {
+  var smiles = [];  
+  fs.readFile(PUBLICFOLDER+"/smiles/smiles.json", "utf8",function (err, data) {
+      if (err) {
+        sys.puts("Error loading " + err);
+      } else {
+        res.simpleJSON(200, JSON.parse(data));
+      }
+    });
+  
+  
+  
+});
+
+
 fu.get("/join", function (req, res) {
   var hash = qs.parse(url.parse(req.url).query).hash;
 sys.puts("!!!!!!!!!!!!!!!!!!!!!: " + hash + "@" + users[hash]);
   if (hash == null || users[hash]==undefined || hash.length == 0) {
-    res.simpleJSON(400, {error: "Bad hash."});
+    res.simpleJSON(400, {error: "No such user"});
     return;
   }
   var nick = users[hash];
   var session = createSession(hash,nick);
   if (session == null) {
-    res.simpleJSON(400, {error: "Session already exist"});
+    res.simpleJSON(400, {error: "You are already connected"});
     return;
   }
 
