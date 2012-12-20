@@ -51,7 +51,7 @@ var server = createServer(function (req, res) {
 });
 
 var getPublicStatic = function (req,res){
-    var filename="./"+PUBLICFOLDER+url.parse(req.url).pathname;  
+    var filename=PUBLICFOLDER+url.parse(req.url).pathname;  
     var content_type = fu.mime.lookupExtension(extname(filename));
     readFile(filename, function (err, data) {
       if (err) {
@@ -81,7 +81,7 @@ function extname (path) {
 }
 
 fu.staticHandler = function (filename) {
-filename="./"+PUBLICFOLDER+"/"+filename;
+filename=PUBLICFOLDER+"/"+filename;
   var body, headers;
   var content_type = fu.mime.lookupExtension(extname(filename));
 

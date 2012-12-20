@@ -8,6 +8,7 @@ var CONFIG = { debug: false
 
 var nicks = [];
 var smiles= {};
+var messageSmiles=[];
 // CUT ///////////////////////////////////////////////////////////////////
 /* This license and copyright apply to all code until the next "CUT"
 http://github.com/jherdman/javascript-relative-time-helpers/
@@ -215,23 +216,15 @@ function addMessage (from, text, time, _class) {
     messageElement.addClass(_class);
 
   // sanitize
-  text = util.toStaticHTML(text);
-  
+  //text = util.toStaticHTML(text);
+  ////////////////////////////Parse//////////////////////////
+  ///////////////////////////////////////////////////////////
   // If the current user said this, add a special css class
   var nick_re = new RegExp(CONFIG.nick);
   if (nick_re.exec(text))
     messageElement.addClass("personal");
     //var reg =/\[[\w\._—:/-]+\]/i;
-    var reg =/\[img\](.*)\[\/img\]/i;
-
-  if(reg.test(text))
-  {
-    var reg2 =/\[img\]/g;
-    var reg3 = /\[\/img\]/g;
-    text=text.replace(reg2,"</br><img  class='img-polaroid' src=\"").replace(reg3,"\"></br>");
-    text=nl2br(text)
-    // alert(text);
-  }
+   
     //alert(reg.test(text));
     //alert(text.match(reg));
   
@@ -354,7 +347,22 @@ function send(msg) {
   if (CONFIG.debug === false) {
     // XXX should be POST
     // XXX should add to messages immediately
+    msg = util.toStaticHTML(msg);
+     var reg =/\[img\](.*)\[\/img\]/i;
+	  if(reg.test(msg))
+	  {
+		var reg2 =/\[img\]/g;
+		var reg3 = /\[\/img\]/g;
+		msg=msg.replace(reg2,"</br><img  class='img-polaroid' src=\"").replace(reg3,"\"></br>");
+		msg=nl2br(msg)
+	  }
+    for(var index in messageSmiles)
+    {
+		msg=msg.replace(smiles[messageSmiles[index]][0],"<img src='smiles/"+smiles[messageSmiles[index]][1]+"'/>");
+	}
+	
     jQuery.get("/send", {id: CONFIG.id, text: msg}, function (data) { }, "json");
+    messageSmiles=[];
   }
 }
 
@@ -408,6 +416,17 @@ function onConnect (session) {
   longPoll();
   $.get('/getSmiles', function(data) {
     smiles=data;
+    xhtml="";
+    for(var index in data)
+	{
+		xhtml+="<div class='smile' style='width:40px!important;height:40px!important; margin:3px!important;text-align:center!important;float:left!important;'><img align='middle' height='50px' title='"+data[index][0]+"'  onclick='addSmile("+index+")' src='smiles/"+data[index][1]+"' /></div>"
+	}
+    $("#example").popover({title: "TrololoChat Smiles:", 
+        animation:false,
+		placement:"right", 
+		html : true,
+		content: xhtml
+	});
   });
   CONFIG.nick = session.nick;
   CONFIG.id = session.id;
@@ -430,6 +449,7 @@ function onConnect (session) {
     CONFIG.unread = 0;
     updateTitle();
   });
+  
 }
 
 //add a list of present chat members to the stream
@@ -438,6 +458,7 @@ function outputUsers () {
   addMessage("users online:", nick_string, new Date(), "notice");
   return false;
 }
+
 
 //get a list of the users presently in the room, and add it to the stream
 function who () {
@@ -524,6 +545,7 @@ $(window).unload(function () {
 });
 
 (function($) {
+	
     $.fn.getCursorPosition = function() {
         var input = this.get(0);
         if (!input) return; // No (input) element found
@@ -544,35 +566,7 @@ function addImgTag()
 {
     var cursorPosition = $("#entry").getCursorPosition()
     $("#entry").val($("#entry").val()+"[img][/img]")
-    
-}
-
-function doGetCaretPosition (ctrl) {
-	var CaretPos = 0;   // IE Support
-	if (document.selection) {
-		ctrl.focus ();
-		var Sel = document.selection.createRange ();
-		Sel.moveStart ('character', -ctrl.value.length);
-		CaretPos = Sel.text.length;
-	}
-	// Firefox support
-	else if (ctrl.selectionStart || ctrl.selectionStart == '0')
-		CaretPos = ctrl.selectionStart;
-	return (CaretPos);
-}
-function setCaretPosition(ctrl, pos){
-	if(ctrl.setSelectionRange)
-	{
-		ctrl.focus();
-		ctrl.setSelectionRange(pos,pos);
-	}
-	else if (ctrl.createTextRange) {
-		var range = ctrl.createTextRange();
-		range.collapse(true);
-		range.moveEnd('character', pos);
-		range.moveStart('character', pos);
-		range.select();
-	}
+    $("#entry").focus();    
 }
 
 
@@ -583,5 +577,12 @@ function nl2br( str ) {	// Inserts HTML line breaks before all newlines in a str
 	return str.replace(/([^>])\n/g, '$1<br/>');
 }
 
-
+function addSmile(id)
+{
+	console.log(smiles[id][1]);
+	$("#entry").val($("#entry").val()+smiles[id][0])
+	messageSmiles.push(id);
+	$("#example").popover("hide")
+	$("#entry").focus();
+}
 
