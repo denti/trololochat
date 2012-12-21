@@ -72,7 +72,7 @@ max-width:1000px;
 #log {
   display: block;
   /* enough padding to clear the toolbar.. is there a better way to do this? */
-  padding-bottom: 5.1em; 
+  padding-bottom: 10.7em; 
   background: inherit;
   overflow: hidden;
 }
@@ -85,7 +85,7 @@ max-width:1000px;
 .personal .nick, .notice .nick { color: #888; }
 .message {  margin: 0.1em 0; color:black;}
 .message td {  vertical-align: top;}
-.nick {   font-weight: bold;  padding: 0 1em 0 0.5em;width:150px;}
+.nick {   font-weight: bold;  padding: 0 1em 0 0.5em;width:170px;}
 .nick a {  color: inherit;}
 #toolbar ul {  margin: 0;  padding: 0;  list-style: none;}
 #toolbar li {display: block;   float: left;  margin: 0 2em 0 0;}
