@@ -44,7 +44,7 @@ var server = createServer(function (req, res) {
         handler(req, res);
     else
 	{
-	console.log("!!!!!!!!!!!!!!!!!!1Request static:"+ url.parse(req.url).pathname)
+	//console.log("!!!!!!!!!!!!!!!!!!1Request static:"+ url.parse(req.url).pathname)
         getPublicStatic(req,res);
 	}
   }
@@ -55,14 +55,14 @@ var getPublicStatic = function (req,res){
     var content_type = fu.mime.lookupExtension(extname(filename));
     readFile(filename, function (err, data) {
       if (err) {
-        sys.puts("Error loading " + filename+ err);
+       // sys.puts("Error loading " + filename+ err);
       } else {
         body = data;
         headers = { "Content-Type": content_type
                   , "Content-Length": body.length
                   };
         if (!DEBUG) headers["Cache-Control"] = "public";
-        sys.puts("!!!!!!!!!static file " + filename + " loaded");
+      //  sys.puts("!!!!!!!!!static file " + filename + " loaded");
         res.writeHead(200, headers);
         res.end(req.method === "HEAD" ? "" : body);
       }
@@ -70,7 +70,7 @@ var getPublicStatic = function (req,res){
 }
 fu.listen = function (port, host) {
   server.listen(port, host);
-  sys.puts("Server at http://" + (host || "127.0.0.1") + ":" + port.toString() + "/");
+ // sys.puts("Server at http://" + (host || "127.0.0.1") + ":" + port.toString() + "/");
 };
 
 fu.close = function () { server.close(); };
@@ -91,17 +91,17 @@ filename=PUBLICFOLDER+"/"+filename;
       return;
     }
 
-    sys.puts("loading " + filename + "...");
+  //  sys.puts("loading " + filename + "...");
     readFile(filename, function (err, data) {
       if (err) {
-        sys.puts("Error loading " + filename);
+    //    sys.puts("Error loading " + filename);
       } else {
         body = data;
         headers = { "Content-Type": content_type
                   , "Content-Length": body.length
                   };
         if (!DEBUG) headers["Cache-Control"] = "public";
-        sys.puts("static file " + filename + " loaded");
+     //   sys.puts("static file " + filename + " loaded");
         callback();
       }
     });

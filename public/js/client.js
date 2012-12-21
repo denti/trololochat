@@ -184,7 +184,7 @@ util = {
 
 //used to keep the most recent messages visible
 function scrollDown () {
-  window.scrollBy(0, 100000000000000000);
+  window.scrollTo(0, document.body.scrollHeight);
   $("#entry").focus();
 }
 
@@ -356,9 +356,10 @@ function send(msg) {
 		msg=msg.replace(reg2,"</br><img  class='img-polaroid' src=\"").replace(reg3,"\"></br>");
 		msg=nl2br(msg)
 	  }
-    for(var index in messageSmiles)
+    for(var index in smiles)
     {
-		msg=msg.replace(smiles[messageSmiles[index]][0],"<img src='smiles/"+smiles[messageSmiles[index]][1]+"'/>");
+		//var re = new RegExp(smiles[index][0],"g");
+		msg=msg.replace(smiles[index][0],"<img src='smiles/"+smiles[index][1]+"'/>");
 	}
 	
     jQuery.get("/send", {id: CONFIG.id, text: msg}, function (data) { }, "json");
@@ -419,13 +420,14 @@ function onConnect (session) {
     xhtml="";
     for(var index in data)
 	{
-		xhtml+="<div class='smile' style='width:40px!important;height:40px!important; margin:3px!important;text-align:center!important;float:left!important;'><img align='middle' height='50px' title='"+data[index][0]+"'  onclick='addSmile("+index+")' src='smiles/"+data[index][1]+"' /></div>"
+		xhtml+="<div class='smile' ><img align='middle' title='"+data[index][0]+"'  onclick='addSmile("+index+")' src='smiles/"+data[index][1]+"' /></div>"
 	}
+	$("#hidden-smiles").html(xhtml)
     $("#example").popover({title: "TrololoChat Smiles:", 
         animation:false,
 		placement:"right", 
 		html : true,
-		content: xhtml
+		content: $("#hidden-smiles").html()
 	});
   });
   CONFIG.nick = session.nick;
@@ -465,7 +467,7 @@ function who () {
   jQuery.get("/who", {}, function (data, status) {
     if (status != "success") return;
     nicks = data.nicks;
-    outputUsers();
+    //outputUsers();
   }, "json");
 }
 

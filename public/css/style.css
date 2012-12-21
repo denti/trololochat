@@ -1,15 +1,19 @@
 body {
+  /*background: url('../img/body.gif') repeat;*/
+  background-color:#222222;
   padding: 0;
   margin: 0;
 }
 body, #entry {
-  background: #22252a;
-  color: #eee;
+  color: black;
 }
+body,#login-form{color:white;}
+#content{max-width:1000px;margin:0 auto;background: url('../img/body.gif') repeat;}
+#app{max-width:1000px;margin:0 auto;min-height:100%;background: url('../img/body.gif') repeat;height:100%;}
 body, table {
   font-family: DejaVu Sans Mono, fixed; 
-  font-size: 14pt;
-  line-height: 150%;
+  font-size: 12pt;
+  line-height: 110%;
 }
 tr,td,table {
   padding: 0;
@@ -27,7 +31,7 @@ a { text-decoration: none; color: #888; }
 a:hover { text-decoration: underline; color: #aaa; }
 
 #loading, #connect {
-  background: #22252a;
+ 
   position: fixed;
   top: 0;
   left: 0;
@@ -46,17 +50,19 @@ a:hover { text-decoration: underline; color: #aaa; }
 }
 
 #toolbar {
+max-width:1000px;
   position: fixed;
-  color: #fff;
+  color: gray;
   width: 100%; 
   bottom: 0;
-  background: #733;
+  background: url('../img/body.gif') repeat;
 }
 
 #entry {
   width: 100%;
-  font-size: inherit;
-  padding: 1em;
+  height:100%;
+  /*font-size: inherit;*/
+  padding: 5px;
   margin: 0;
   border-width: 0;
   outline-width: 0;
@@ -71,18 +77,22 @@ a:hover { text-decoration: underline; color: #aaa; }
   overflow: hidden;
 }
 
+#log img{min-width:40px;}
+
 /* not very important info */
-.notice td, .join td, .part td, .message .date { color: #555; }
+.notice td, .join td, .part td, .message .date { color: #888; }
 .error td { color: #933; }
-.personal .nick, .notice .nick { color: #cd5; }
-.message {  margin: 0.1em 0;}
+.personal .nick, .notice .nick { color: #888; }
+.message {  margin: 0.1em 0; color:black;}
 .message td {  vertical-align: top;}
-.nick {   font-weight: bold;  padding: 0 1em 0 0.5em;}
+.nick {   font-weight: bold;  padding: 0 1em 0 0.5em;width:150px;}
 .nick a {  color: inherit;}
 #toolbar ul {  margin: 0;  padding: 0;  list-style: none;}
 #toolbar li {display: block;   float: left;  margin: 0 2em 0 0;}
 #usersLink {color: inherit;}
 button {cursor:pointer;}
-.popover-inner {width: 1100px;}
-.popover {width: 1100px; height:500px;color:black;}
+.popover-inner {width: 1000px;}
+.popover {width: 1000px; height:550px;color:black;}
+.popover img{max-width:50px;max-height:40px;cursor:pointer;}
+.popover-content div{width:50px!important;height:40px!important; margin-top:5px!important;text-align:center!important;float:left!important;}
 

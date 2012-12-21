@@ -38,13 +38,13 @@ var channel = new function () {
 
     switch (type) {
       case "msg":
-        sys.puts("<" + nick + "> " + text);
+     //   sys.puts("<" + nick + "> " + text);
         break;
       case "join":
-        sys.puts(nick + " join");
+     //   sys.puts(nick + " join");
         break;
       case "part":
-        sys.puts(nick + " part");
+     //   sys.puts(nick + " part");
         break;
     }
 
@@ -154,7 +154,7 @@ fu.get("/getSmiles", function (req, res) {
   var smiles = [];  
   fs.readFile(PUBLICFOLDER+"/smiles/smiles.json", "utf8",function (err, data) {
       if (err) {
-        sys.puts("Error loading " + err);
+    //    sys.puts("Error loading " + err);
       } else {
         res.simpleJSON(200, JSON.parse(data));
       }
@@ -167,7 +167,7 @@ fu.get("/getSmiles", function (req, res) {
 
 fu.get("/join", function (req, res) {
   var hash = qs.parse(url.parse(req.url).query).hash;
-sys.puts("!!!!!!!!!!!!!!!!!!!!!: " + hash + "@" + users[hash]);
+//sys.puts("!!!!!!!!!!!!!!!!!!!!!: " + hash + "@" + users[hash]);
   if (hash == null || users[hash]==undefined || hash.length == 0) {
     res.simpleJSON(400, {error: "No such user"});
     return;
