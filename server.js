@@ -3,10 +3,7 @@ PORT = process.env.PORT || 5000;
 var fs = require("fs");
 
 var users={};
-users["84152fe11d7adb51871c4cd734ae35c4f98f0e91da5f3d2507303913a1b5849b"]="Денис Вадимович"
-users["7a66d01b356aeeb077b5f74cc0d9df894e9f50f4bac6c8aa2ea2109e58d1b9ac"]="Леонид Прудников"
-users["9c6d405bba2db24bfbd22fc7ff74b39bd9c5e9c6ce66299c6519be517e6ed7c6"]="Алексей Викторович"
-users["03085dc11c68960927dc342ea47460d4949cb28a2e973a074814e35dfde9e459"]="Deniro"
+users["hash"]="name"
 // when the daemon started
 var starttime = (new Date()).getTime();
 
